@@ -1,19 +1,36 @@
 package main
 
 import (
-	"gorestapi/config"
-	"gorestapi/internals/repositories"
+    "gorestapi/config"
+    "gorestapi/internals/repositories"
     "gorestapi/internals/services"
     "gorestapi/internals/handlers"
-	"net/http"
-
+    "net/http"
 )
 
-func main() {
+func initApp() (
+    postService *services.PostService,
+    categoryService *services.CategoryService,
+    authService *services.AuthService,
+    postImageService *services.PostImageService,
+) {
+    config.ConnectGorm()
+
     postRepo := repositories.NewPostRepository(config.DB)
-    postService := services.NewPostService(postRepo)
+    categoryRepo := repositories.NewCategoryRepository(config.DB)
+    userRepo := repositories.NewUserRepository(config.DB)
+    postImageRepo := repositories.NewPostImageRepository()
 
-	handlers.RegisterRoutes("/v1", postService)
+    postService = services.NewPostService(postRepo)
+    categoryService = services.NewCategoryService(categoryRepo)
+    authService = services.NewAuthService(userRepo)
+    postImageService = services.NewPostImageService(postImageRepo)
+
+    return
+}
+
+func main() {
+    postService, categoryService, authService, postImageService := initApp()
+    handlers.RegisterRoutes("/v1", postService, categoryService, authService, postImageService)
     http.ListenAndServe(":8080", nil)
-
 }
