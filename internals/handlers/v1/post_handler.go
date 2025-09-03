@@ -6,14 +6,16 @@ import (
     "strconv"
     "gorestapi/internals/models"
     "gorestapi/internals/services"
-    "github.com/go-playground/validator/v10"
+    "gorestapi/internals/core"
 )
+
+
+// var validate = validator.New()
 
 type PostHandler struct {
     Service *services.PostService
 }
 
-var validate = validator.New()
 
 func NewPostHandler(service *services.PostService) *PostHandler {
     return &PostHandler{Service: service}
@@ -25,7 +27,7 @@ func (h *PostHandler) Create(w http.ResponseWriter, r *http.Request) {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-    if err := validate.Struct(post); err != nil {
+    if err := core.Validate.Struct(post); err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }

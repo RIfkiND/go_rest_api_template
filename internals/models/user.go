@@ -9,4 +9,5 @@ type User struct {
     Password string    `json:"password"`
 	CreatedAt  time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt  time.Time `json:"updated_at" gorm:"autoUpdateTime"`
+    Post      []Post
 }								

@@ -7,5 +7,5 @@ type Category struct {
     Name      string    `json:"name" gorm:"uniqueIndex"`
     CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
     UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
-    Post [] Post
+    Post     []Post
 }
